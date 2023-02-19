@@ -27,7 +27,8 @@ After the script prints `Success` on the console, find `output.ics` in the repo 
 
 As the complete login process of DLMU system is still unclear, this program uses cookies from the previous login session to fetch data.  
 We promise that your cookies will not be used anywhere apart from generating this ics file.  
-Besides, it's unknown whether we have fully implemented every function of DLMU system, so be cautious in case it outputs faulty ics file.
+Besides, it's unknown whether we have fully implemented every function of DLMU system, so make sure to check the ics file according to DLMU system.  
+We do not take responsibilities for any outcomes of using this program.  
 Using this program means that you have understood possible consequences.
 
 ## To-Do
