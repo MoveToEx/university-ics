@@ -1,4 +1,4 @@
-# FJNU-ics
+# DLMU-ics
 
 Generate ics from DLMU system.  
 
