@@ -66,7 +66,7 @@ class DLMUApi:
         src = bs4.BeautifulSoup(res.content.decode(), 'html.parser').select_one(
             '#ExportA > script').string
 
-        with open("./underscore-esm.js", encoding='utf8') as f:
+        with open("./underscore-esm.min.js", encoding='utf8') as f:
             js = f.read()
 
         res = s.get(
