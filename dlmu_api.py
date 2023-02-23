@@ -1,3 +1,4 @@
+import json
 import datetime
 import time
 import browser_cookie3 as bc
@@ -74,20 +75,27 @@ class DLMUApi:
         res = s.get(
             'http://jw.xpaas.dlmu.edu.cn/eams/static/scripts/course/TaskActivity.js?v3.21&_=' + str(time.time() * 1e3))
 
-        js = js + res.content.decode('utf8') + re.sub("fillTable\\(table0,\\d*,\\d*,\\d*\\);", "", src) + """
+        js = js + res.content.decode('utf8') + re.sub(r"fillTable\(table0,\d*,\d*,\d*\);", "", src) + """
 function get() {
     ans = []
-    for (var i in table0.activities) {
+    for (var i = 0; i < 70; i++) {
         if (table0.activities[i][0]) {
             var t = {
-                "name": table0.activities[i][0].courseName,
+                "name": table0.activities[i][0].courseName.replace(/\s/g, ''),
                 "teacher": table0.activities[i][0].teacherName,
                 "location": table0.activities[i][0].roomName,
                 "weeks": table0.activities[i][0].vaildWeeks,
                 "weekday": Math.ceil((Number(i) + 1) / 10),
-                "index": Number(i) % 10 + 1
+                "from": Number(i) % 10 + 1,
+                "to": Number(i) % 10 + 1
             };
-            ans.push(t);
+            if (ans.length && ans[ans.length - 1]["name"] == t["name"]) {
+                ans[ans.length - 1]["to"] = Number(i) % 10 + 1;
+            }
+            else {
+                ans.push(t);
+                // console.log(i, t['weekday']);
+            }
         }
     }
     return ans;
@@ -96,21 +104,26 @@ get
 """
         data = js2py.eval_js(js)()
 
-        for i in data:
+        # print(data)
+
+        with open("out.json", 'wb') as f:
+            f.write(str(data).encode('utf8'))
+
+        for it in data:
             event = {
-                "name": re.search(r'(.*)\(\d*\.\d*\)', i['name']).group(1),
-                "teacher": i['teacher'],
-                "location": i['location'],
-                "weeks": [x for x in range(len(i['weeks'])) if i['weeks'][x] == '1'],
-                "weekday": i['weekday'],
+                "name": re.search(r'(.*)\(\d*\.\d*\)', it['name']).group(1),
+                "teacher": it['teacher'],
+                "location": it['location'],
+                "weeks": [x for x in range(len(it['weeks'])) if it['weeks'][x] == '1'],
+                "weekday": it['weekday'],
                 "geo": "",
                 "time": {
-                    "from": datetime.timedelta(hours=class_time[i['index']][0], minutes=class_time[i['index']][1]),
-                    "to": datetime.timedelta(hours=class_time[i['index']][0], minutes=class_time[i['index']][1] + 45)
+                    "from": datetime.timedelta(hours=class_time[it['from']][0], minutes=class_time[it['from']][1]),
+                    "to": datetime.timedelta(hours=class_time[it['to']][0], minutes=class_time[it['to']][1] + 45)
                 },
                 "ext": []
             }
-            geo = self.find_geo(i['location'])
+            geo = self.find_geo(it['location'])
             if geo:
                 event['geo'] = "%f,%f" % (geo[0], geo[1])
                 event['ext'].append({
@@ -118,7 +131,7 @@ get
                     "value": "geo:" + str(geo[0]) + ',' + str(geo[1]),
                     "param": {
                         "VALUE": "URI",
-                        "X-TITLE": i['location']
+                        "X-TITLE": it['location']
                     }
                 })
             schedule.append(event)
