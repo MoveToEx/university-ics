@@ -103,6 +103,7 @@ get
                 "location": i['location'],
                 "weeks": [x for x in range(len(i['weeks'])) if i['weeks'][x] == '1'],
                 "weekday": i['weekday'],
+                "geo": "",
                 "time": {
                     "from": datetime.timedelta(hours=class_time[i['index']][0], minutes=class_time[i['index']][1]),
                     "to": datetime.timedelta(hours=class_time[i['index']][0], minutes=class_time[i['index']][1] + 45)
@@ -111,6 +112,7 @@ get
             }
             geo = self.find_geo(i['location'])
             if geo:
+                event['geo'] = "%f,%f" % (geo[0], geo[1])
                 event['ext'].append({
                     "name": "X-APPLE-STRUCTURED-LOCATION",
                     "value": "geo:" + str(geo[0]) + ',' + str(geo[1]),

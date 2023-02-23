@@ -56,13 +56,22 @@ for i in range(365):
             debug("\t", it['name'], it['time']['from'], it['time']['to'])
 
             event = ics.Event()
-            event['summary'] = it['name']
-            event['uid'] = str(uuid.uuid4()).upper()
-            event['description'] = '授课教师: ' + it['teacher']
-            event['location'] = it['location']
+
+            # Mandatory
             event['dtstamp'] = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
             event['dtstart'] = (t + it['time']['from']).strftime("%Y%m%dT%H%M%S")
             event['dtend'] = (t + it['time']['to']).strftime("%Y%m%dT%H%M%S")
+            event['uid'] = str(uuid.uuid4()).upper()
+
+            # Optional
+            event['summary'] = it['name']
+            event['description'] = '授课教师: ' + it['teacher']
+            
+            if it['location']:
+                event['location'] = it['location']
+
+            if it['geo']:
+                event['geo'] = it['geo']
 
             if it['ext']:
                 for item in it['ext']:
