@@ -30,5 +30,5 @@ Using this program means that you have understood possible consequences.
 
 | University | Website | ID |
 | :-: | :-: | :-: |
-| Dalian Maritime Univeristy | https://dlmu.edu.cn | `dlmu` |
+| Dalian Maritime Univeristy | https://www.dlmu.edu.cn | `dlmu` |
 | Fujian Normal Univeristy | https://www.fjnu.edu.cn | `fjnu` |
