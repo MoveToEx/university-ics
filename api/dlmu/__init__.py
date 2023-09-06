@@ -15,7 +15,7 @@ class_time = [
 ]
 
 
-class DLMUApi:
+class API:
     def __init__(self):
         self.args = {
             'username': '',
@@ -62,7 +62,7 @@ class DLMUApi:
 
         des = DES.new(base64.b64decode(crypto), DES.MODE_ECB)
 
-        cipher = base64.b64encode(des.encrypt(DLMUApi.pad(self.args['password'])))
+        cipher = base64.b64encode(des.encrypt(API.pad(self.args['password'])))
 
         print('cipher =', cipher)
 
@@ -120,7 +120,7 @@ class DLMUApi:
 
         src = bs(res.content.decode(), 'html.parser').select_one('#ExportA > script').string
 
-        with open("./underscore-esm.min.js", encoding='utf8') as f:
+        with open("./api/dlmu/underscore-esm.min.js", encoding='utf8') as f:
             js = f.read()
 
         res = self.session.get('http://jw.xpaas.dlmu.edu.cn/eams/static/scripts/course/TaskActivity.js?v3.21&_=' + str(time.time() * 1e3))

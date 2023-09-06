@@ -1,34 +1,34 @@
-# DLMU-ics
+# university-ics
 
-Generate ics from DLMU system.  
+Generate ics from school system.  
 
 ## Installation
 
 ```sh
-git clone https://github.com/MoveToEx/DLMU-ics
-cd DLMU-ics
-pip install -r requirements.txt
+$ git clone https://github.com/MoveToEx/university-ics
+$ cd university-ics
+$ pip install -r requirements.txt
 ```
 
 ## Usage
 
-~~Before running Python, open your browser and login to [DLMU](http://jw.xpaas.dlmu.edu.cn/eams/homeExt.action).~~  
-~~Then run the script in the following format:~~
-~~where YYYY/MM/DD specifies the first Monday of the current semester.  ~~
+```sh
+$ py main.py <ID>
+```
 
-I'm happy to announce that this script is now capable of simulating the login process by sending requests and collect date-related information using responses.  
-All you need to do is to start this script and enter your id and password.  
+Enter your information according to prompts.  
 
 After the script prints `success` on the console, find `output.ics` in the repo directory.  
 
 ## Disclaimer
 
-
-Besides, it's unknown whether we have fully implemented every function of DLMU system, so make sure to check the ics file according to DLMU system.  
+It's unknown whether we have fully implemented every function of every system, so make sure to check the ics file according to your system.  
 We do not take responsibilities for any outcomes of using this program.  
 Using this program means that you have understood possible consequences.
 
-## To-Do
+## ID List
 
-- [ ] Full geo location support
-- [x] Auto date alignment
+| University | Website | ID |
+| :-: | :-: | :-: |
+| Dalian Maritime Univeristy | https://dlmu.edu.cn | `dlmu` |
+| Fujian Normal Univeristy | https://www.fjnu.edu.cn | `fjnu` |

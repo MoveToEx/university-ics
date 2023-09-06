@@ -1,19 +1,20 @@
 import getpass
 import datetime
-import dlmu_api
 import argparse
 import uuid
 import icalendar as ics
+import importlib as il
 
 parser = argparse.ArgumentParser()
 
+parser.add_argument('module')
 parser.add_argument('-o', '--output', help='output file', default='output.ics')
 parser.add_argument('-v', '--verbose', action='store_true', help='pint debug info')
 parser.add_argument('-d', '--start_date', help='starting date of current semester, yyyy/mm/dd')
 
 args = parser.parse_args()
 cal = ics.Calendar()
-api = dlmu_api.DLMUApi()
+api = il.import_module('api.' + args.module).API()
 
 cal['dtstart'] = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
 cal['summary'] = "CLASS SCHEDULE"
