@@ -19,16 +19,6 @@ cal['dtstart'] = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
 cal['summary'] = "CLASS SCHEDULE"
 cal['prodid'] = "DLMU-ics"
 
-if not args.start_date:
-    s = input("date(default=2022/8/29)=")
-    if len(s):
-        t = datetime.datetime.strptime(s, '%Y/%m/%d')
-    else:
-        t = datetime.datetime(2022, 8, 29)
-    print('----------')
-else:
-    t = datetime.datetime.strptime(args.start_date, '%Y/%m/%d')
-
 def debug(*s):
     if args.verbose:
         print(*s)
@@ -39,12 +29,21 @@ for key in api.args:
     elif api.args[key] == "*":
         api.args[key] = getpass.getpass(key)
 
-print("Running fetch()...")
 data = api.fetch()
-
-print("Generating ics...")
 week = 0
 count = 0
+
+if 'starting_date' in dir(api):
+    t = api.starting_date()
+elif not args.start_date:
+    s = input("date(default=2022/8/29)=")
+    if len(s):
+        t = datetime.datetime.strptime(s, '%Y/%m/%d')
+    else:
+        t = datetime.datetime(2022, 8, 29)
+    print('----------')
+else:
+    t = datetime.datetime.strptime(args.start_date, '%Y/%m/%d')
 
 for i in range(365):
     if i % 7 == 0:
@@ -75,15 +74,15 @@ for i in range(365):
 
             if it['ext']:
                 for item in it['ext']:
-                    event.add(item['name'], item['value'], parameters=item['param'])
+                    event.add(**item)
 
             cal.add_component(event)
     t += datetime.timedelta(days=1)
 
 print(count, "events in total")
-print("Writing output to", args.output, "...")
+print("writing output to", args.output, "...")
 
 with open(args.output, 'wb') as f:
     f.write(cal.to_ical())
 
-print("Success")
+print("success")
